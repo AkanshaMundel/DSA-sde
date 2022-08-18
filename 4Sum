@@ -1,0 +1,42 @@
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        vector<vector<int>>ans;
+        if(nums.empty())return ans;
+        int n = nums.size();
+        sort(nums.begin(),nums.end());
+        
+        for(int i = 0 ;i<n;i++){
+            for(int j = i+1;j<n;j++){
+                
+                int tar1 = target-(nums[i]+nums[j]); //finding remaining value
+                int lo = j+1;
+                int hi = n-1;          //starting two sum using twopointer approach
+                
+                while(lo<hi){
+                    int twosum =nums[lo]+nums[hi]; 
+                     if(tar1 ==twosum ){
+                         
+                         vector<int>temp(4,0);
+                         temp[0] =(nums[i]);
+                          temp[1]=(nums[j]);
+                          temp[2]=(nums[lo]);
+                          temp[3]=(nums[hi]);
+                         ans.push_back(temp);
+                            while(lo<hi&&nums[lo]==temp[2]) lo++;
+                          while(lo<hi&&nums[hi]==temp[3])hi--;
+                     }
+                    else if(twosum<tar1)lo++;
+                    else 
+                        hi--;
+                }
+                while(j+1<n && nums[j] ==nums[j+1]) j++; //avoiding duplicacy
+            }
+            while(i+1<n && nums[i] ==nums[i+1]) i++;
+        }
+        return ans;
+    }
+};
+// tc: O(n^3)
+// sc:o(1)
+// approach :converting through two sum 
