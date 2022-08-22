@@ -1,3 +1,5 @@
+cyle detect in directed graph by khans algo "BFS"
+
 class Solution {
   public:
   bool checkcycle(int s,int V,vector<int> adj[],vector<int>&vis){
