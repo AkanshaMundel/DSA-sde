@@ -1,57 +1,59 @@
 
+//Do a topological sort and store in a stack.
+//Create a transpose adjacency list.
+//Start traversing according to topological sort and transpose adjacency matrix.
+//Start popping elements from stack. If it is not visited, then it will contribute in a new component. Do dfs traversal on it to it's adjacent nodes.
 class Solution
 {
-	public:
-	void dfs(int node,vector<int> adj[],vector<int> &vis ,stack<int> &st){
-	    vis[node]= {1};
-	    for(auto it:adj[node]){
-	        if(!vis[it]){
-	            dfs(it,adj,vis,st);
-	        }
-	    }
-	    st.push(node);
-	}
-	
-	void revdfs(int node,vector<int> vis,vector<int> transpose){
-	    cout<<node;
-	    vis[node]=1;
-	    for(auto it:transpose[node]){
-	        if(!vis[it]){
-	            revdfs(it,vis,transpose);
-	        }
-	    }
-	}
-	
-	//Function to find number of strongly connected components in the graph.
-    int kosaraju(int V, vector<int> adj[])
-    {
-        //code here
-        
-        
-        stack<int>st;
-        vector<int >vis(V,0);
-        for(int i = 0;i<V;i++){
-            if(!vis[i]){
-                dfs(0,adj,vis,st);
+  public:
+  //dfs traversal for in the transposed adjacency matrix
+  void revdfs(int node, vector<int>&vis, vector<int>transpose[]){
+      vis[node] = 1;
+      for(auto p: transpose[node]){
+          if(!vis[p]){
+              revdfs(p,vis,transpose);
+          }
+      }
+  }
+  //Topological sort 
+    void tpsort(vector<int>&vis, vector<int>adj[], int node, stack<int>&st){
+        vis[node] = 1;
+        for(auto p: adj[node]){
+            if(!vis[p]){
+                tpsort(vis,adj,p,st);   
             }
         }
-        vector<int> transpose(V);
-        for(int i = 0;i<V;i++){
+        st.push(node);
+    }
+    int kosaraju(int V, vector<int> adj[])
+    {
+        stack<int>st;
+        vector<int>vis(V,0);
+        for(int i=0; i<V; i++){
+            if(!vis[i]){
+                tpsort(vis,adj,i,st);
+            }
+        }
+        //creating a transpose adjacency list
+        vector<int>transpose[V];
+        for(int i=0; i<V; i++){
             vis[i] = 0;
-            for(auto it:adj[i]){
-                transpose[it].push_back(i);
+            for(auto p: adj[i]){
+                transpose[p].push_back(i); //this will reverse the direction of the edges
             }
-            
+        }
+        
+        int ans = 0;
+        //start traversing according to topological sort
+        //will traverse with the help of transpose adjacency matrix
+        while(!st.empty()){
+            int top = st.top();
+            st.pop();
+            if(!vis[top]){
+                ans++; //contribute in a new component
+                revdfs(top,vis,transpose);
             }
-            while(!st.empty()){
-                {int node= st.top();
-                st.pop();
-                if(!vis[node]){
-                   
-                      revdfs(node,vis,transpose);
-                      cout<<endl;
-                }
-            }
-            return 0;
+        }
+        return ans;
     }
 };
