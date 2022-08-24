@@ -1,0 +1,81 @@
+//BFS KANAS'S ALGO
+
+BY USING CONCEPT OF TOPOLOGYSORT IF FIND ALL VERTEX THERE IS NO CYCLE 
+class Solution {
+  public:
+    // Function to detect cycle in a directed graph.
+    bool isCyclic(int V, vector<int> adj[]) {
+        // code here
+        //BFS 
+        
+        vector<int>indgr(V,0);
+        queue<int>q;
+        for(int i =0;i<V;i++){
+            for(auto it:adj[i]){
+                indgr[it]++;
+            }
+        }
+        
+        vector<int> topoans;
+        for(int i =0;i<V;i++){
+            if(indgr[i]==0){
+                q.push(i);
+            }
+        }
+        int cnt=0;
+        while(!q.empty()){
+            int node = q.front();
+            q.pop();
+            cnt++;
+            for(auto it:adj[node]){
+                indgr[it]--;
+                if(indgr[it] ==0)
+                   q.push(it);
+            }
+        }
+        if(cnt==V) return 0;
+        return 1;
+    }
+};
+--------------------------------------------------------------------------------------------------------------------------------------
+DFS
+class Solution {
+  public:
+  bool dfscycle(int node ,int vis[],int dfsvis[],vector<int> adj[]){
+      vis[node]=1;
+      dfsvis[node]=1;
+      for(auto it: adj[node]){
+          if(!vis[it]){
+              if(dfscycle(it , vis,dfsvis,adj)) return true;
+          
+          }
+          else if(dfsvis[it]){ //checking if its value ==notnull
+           return true;}
+           
+      }
+         dfsvis[node]=0;
+         return false;
+            
+         
+      
+  }
+    // Function to detect cycle in a directed graph.
+    bool isCyclic(int V, vector<int> adj[]) {
+        // code here
+       int vis[V];
+      int dfsvis[V];
+        
+        memset(vis,0,sizeof vis);
+        memset(dfsvis,0, sizeof dfsvis);
+        
+        for(int i=0;i<V;i++ ){
+            if(!vis[i]){
+                if( dfscycle(i , vis,dfsvis,adj))
+                    return true;
+            }
+           
+        }
+        return false;
+        
+    }
+};
