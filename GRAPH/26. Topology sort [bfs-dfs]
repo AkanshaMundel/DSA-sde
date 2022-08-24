@@ -1,0 +1,75 @@
+class Solution
+{
+	public:
+	//Function to return list containing vertices in Topological order. 
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    // code here
+	    //USING BFS 
+	    queue<int> q;
+	    vector<int> indgree(V,0);
+	    for(int i =0;i<V;i++ ){
+	        for(auto it :adj[i]){
+	           indgree[it]++; 
+	        }
+	    }
+	          
+	    
+	    vector<int >topans;
+	    for(int i=0;i<V;i++){
+	        if(indgree[i]==0)
+	           q.push(i);//moving 0 indree tomqueue
+	    }
+	    while(!q.empty()){
+	        int node = q.front();
+	        q.pop();
+	        topans.push_back(node);
+	        for(auto it:adj[node]){
+	            indgree[it]--;
+	            if(indgree[it]==0){
+	           q.push(it);
+	        }
+	        
+	    }
+	    }
+	    return topans;
+	   
+	}
+};
+----------------------------------------------------------------------------------------------------------------
+
+DFS
+
+class Solution
+{
+	public:
+	void dfstopsort(int node,vector<int> &vis,stack<int>&st,vector<int> adj[]){
+	    vis[node]=1;
+	    for(auto it:adj[node]){
+	        if(!vis[it]){
+	            dfstopsort(it,vis,st,adj);
+	        }
+	    }
+	    st.push(node);
+	}
+	//Function to return list containing vertices in Topological order. 
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    // code here
+	    stack<int>st;
+	    vector<int>vis(V,0);
+	    for(int i = 0;i<V;i++){
+	        if(vis[i]==0){
+	            dfstopsort(i,vis,st,adj);
+	        }
+	    }
+	    vector<int> topans;
+	    while(!st.empty()){
+	        topans.push_back(st.top());
+	         st.pop();
+	    }
+	    return topans;
+	}
+};
+
+//DFS
