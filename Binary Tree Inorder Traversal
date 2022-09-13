@@ -1,0 +1,48 @@
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+         vector<int>ans;
+        if(root ==NULL)return ans;
+        stack<TreeNode*>st;
+         TreeNode* node =root;
+       
+        while(true){
+            if(node!= NULL){
+                st.push(node);
+                node = node->left;
+            }
+            else{
+               if(st.empty() == true)break;
+            node = st.top();
+            ans.push_back(node->val);
+            st.pop();
+            node= node->right;
+            }
+        }
+        return ans;
+    }
+};
+//BY INTRATIVE APPROACH  --left root right
+//PUT ROOT IN STACK  the left h then push till null nd strt pop out if right then push or else print left then poping out ele print root nd assign null while pop out left
+
+
+
+----------------------------------------------------------------------------------------------
+class Solution {
+public:
+     void helper(TreeNode* root,vector<int> &ans){
+         if(!root)return ;
+         if(root!=NULL){
+             helper(root->left,ans);
+              ans.push_back(root->val);
+             helper(root->right,ans);
+         }
+     }
+    vector<int> inorderTraversal(TreeNode* root) {
+        
+       vector<int>ans;
+         helper(root,ans);
+        return ans;
+    }
+};
+//recrussive 
